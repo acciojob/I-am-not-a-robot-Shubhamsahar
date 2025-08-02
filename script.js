@@ -1,1 +1,64 @@
 //your code here
+ let images = [];
+        let clickedImages = [];
+        let duplicateImageIndex;
+
+        function shuffleImages() {
+            let imageArray = ['img1.jpg', 'img2.jpg', 'img3.jpg', 'img4.jpg', 'img5.jpg'];
+            let randomIndex = Math.floor(Math.random() * imageArray.length);
+            duplicateImageIndex = randomIndex;
+            imageArray.push(imageArray[randomIndex]);
+            for (let i = imageArray.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [imageArray[i], imageArray[j]] = [imageArray[j], imageArray[i]];
+            }
+            return imageArray;
+        }
+
+        function createImageElements() {
+            images = shuffleImages();
+            let imageDiv = document.getElementById('images');
+            imageDiv.innerHTML = '';
+            for (let i = 0; i < images.length; i++) {
+                let img = document.createElement('img');
+                img.src = images[i];
+                img.id = i;
+                img.addEventListener('click', clickImage);
+                imageDiv.appendChild(img);
+            }
+        }
+
+        function clickImage(event) {
+            let img = event.target;
+            clickedImages.push(img);
+            img.style.border = '2px solid blue';
+            if (clickedImages.length === 1) {
+                document.getElementById('reset').style.display = 'inline-block';
+            } else if (clickedImages.length === 2) {
+                document.getElementById('verify').style.display = 'inline-block';
+            }
+        }
+
+        function reset() {
+            clickedImages = [];
+            document.getElementById('reset').style.display = 'none';
+            document.getElementById('verify').style.display = 'none';
+            document.getElementById('para').textContent = '';
+            let images = document.querySelectorAll('#images img');
+            for (let i = 0; i < images.length; i++) {
+                images[i].style.border = 'none';
+            }
+        }
+
+        function verify() {
+            document.getElementById('verify').style.display = 'none';
+            if (clickedImages[0].src === clickedImages[1].src) {
+                document.getElementById('para').textContent = 'You are a human. Congratulations!';
+            } else {
+                document.getElementById('para').textContent = "We can't verify you as a human. You selected the non-identical tiles.";
+            }
+        }
+
+        createImageElements();
+        document.getElementById('reset').addEventListener('click', reset);
+        document.getElementById('verify').addEventListener('click', verify);
