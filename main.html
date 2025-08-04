@@ -1,94 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Robot Verification System</title>
-    <style>
-        #reset, #verify {
-            display: none;
-        }
-        img {
-            width: 100px;
-            height: 100px;
-            margin: 10px;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <title>I'm Not a Robot</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div class="container">
     <h3 id="h">Please click on the identical tiles to verify that you are not a robot.</h3>
-    <div id="images"></div>
-    <button id="reset">Reset</button>
-    <button id="verify">Verify</button>
+    <div class="tiles" id="tile-container"></div>
+    <div class="buttons">
+      <button id="reset" style="display: none;">Reset</button>
+      <button id="verify" style="display: none;">Verify</button>
+    </div>
     <p id="para"></p>
+  </div>
 
-    <script>
-        let images = [];
-        let clickedImages = [];
-        let duplicateImageIndex;
-
-        function shuffleImages() {
-            let imageArray = ['https://picsum.photos/100', 'https://picsum.photos/100?random=1', 'https://picsum.photos/100?random=2', 'https://picsum.photos/100?random=3', 'https://picsum.photos/100?random=4'];
-            let randomIndex = Math.floor(Math.random() * imageArray.length);
-            duplicateImageIndex = randomIndex;
-            imageArray.push(imageArray[randomIndex]);
-            for (let i = imageArray.length - 1; i > 0; i--) {
-                let j = Math.floor(Math.random() * (i + 1));
-                [imageArray[i], imageArray[j]] = [imageArray[j], imageArray[i]];
-            }
-            return imageArray;
-        }
-
-        function createImageElements() {
-            images = shuffleImages();
-            let imageDiv = document.getElementById('images');
-            imageDiv.innerHTML = '';
-            for (let i = 0; i < images.length; i++) {
-                let img = document.createElement('img');
-                img.src = images[i];
-                img.id = i;
-                img.addEventListener('click', clickImage);
-                imageDiv.appendChild(img);
-            }
-        }
-
-        function clickImage(event) {
-            let img = event.target;
-            clickedImages.push(img);
-            img.style.border = '2px solid blue';
-            if (clickedImages.length === 1) {
-                document.getElementById('reset').style.display = 'inline-block';
-            } else if (clickedImages.length === 2) {
-                document.getElementById('verify').style.display = 'inline-block';
-            }
-        }
-
-        function reset() {
-            clickedImages = [];
-            document.getElementById('reset').style.display = 'none';
-            document.getElementById('verify').style.display = 'none';
-            document.getElementById('para').textContent = '';
-            let images = document.querySelectorAll('#images img');
-            for (let i = 0; i < images.length; i++) {
-                images[i].style.border = 'none';
-            }
-        }
-
-        function verify() {
-            document.getElementById('verify').style.display = 'none';
-            if (clickedImages[0].src === clickedImages[1].src) {
-                document.getElementById('para').textContent = 'You are a human. Congratulations!';
-            } else {
-                document.getElementById('para').textContent = "We can't verify you as a human. You selected the non-identical tiles.";
-            }
-        }
-
-        createImageElements();
-        document.getElementById('reset').addEventListener('click', reset);
-        document.getElementById('verify').addEventListener('click', verify);
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
